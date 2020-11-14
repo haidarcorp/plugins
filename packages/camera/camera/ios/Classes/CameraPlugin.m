@@ -187,6 +187,8 @@ static ResolutionPreset getResolutionPresetForString(NSString *preset) {
 @property(assign, nonatomic) CMTime audioTimeOffset;
 @property(nonatomic) CMMotionManager *motionManager;
 @property AVAssetWriterInputPixelBufferAdaptor *videoAdaptor;
+@property(nonatomic, assign) int zoom;
+- (void)zoom:(NSUInteger *)step;
 @end
 
 @implementation FLTCam {
@@ -246,6 +248,8 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_motionManager startAccelerometerUpdates];
 
   [self setCaptureSessionPreset:_resolutionPreset];
+
+  _zoom = 1;
   return self;
 }
 
@@ -255,6 +259,19 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
 
 - (void)stop {
   [_captureSession stopRunning];
+}
+
+- (void)zoom:(NSUInteger *)step {
+  _zoom += step;
+
+  if (_zoom < 1) {
+    _zoom = 1;
+    return;
+  }
+
+  [_captureDevice lockForConfiguration:NULL];
+  [_captureDevice setVideoZoomFactor:_zoom];
+  [_captureDevice unlockForConfiguration];
 }
 
 - (void)captureToFile:(NSString *)path result:(FlutterResult)result API_AVAILABLE(ios(10)) {
@@ -868,6 +885,16 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     result(nil);
   } else if ([@"resumeVideoRecording" isEqualToString:call.method]) {
     [_camera resumeVideoRecording];
+    result(nil);
+  } else if ([@"zoomIn" isEqualToString:call.method]) {
+    [_camera zoom:1];
+    result(nil);
+  } else if ([@"zoomOut" isEqualToString:call.method]) {
+    [_camera zoom:-1];
+    result(nil);
+  } else if ([@"zoom" isEqualToString:call.method]) {
+    NSUInteger step = ((NSNumber *)call.arguments[@"step"]).unsignedIntegerValue;
+    [_camera zoom:step];
     result(nil);
   } else {
     NSDictionary *argsMap = call.arguments;

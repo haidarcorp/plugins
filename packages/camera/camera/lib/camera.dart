@@ -624,6 +624,22 @@ class CameraController extends ValueNotifier<CameraValue> {
     }
   }
 
+
+  /// Increments zoom step by 1
+  Future<void> zoomIn() async {
+    await _channel.invokeMethod<void>('zoomIn');
+  }
+
+  /// Sets zoom to specified step
+  Future<void> zoom(int step) async {
+    await _channel.invokeMethod<void>('zoom', <String, dynamic>{'step': step});
+  }
+
+  /// Decrements zoom step by 1
+  Future<void> zoomOut() async {
+    await _channel.invokeMethod<void>('zoomOut');
+  }
+
   /// Releases the resources of this camera.
   @override
   Future<void> dispose() async {
