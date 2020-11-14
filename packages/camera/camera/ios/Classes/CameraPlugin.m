@@ -268,7 +268,11 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     _zoom = 1;
     return;
   }
-
+  AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+  float max=videoDevice.activeFormat.videoMaxZoomFactor;
+  if(_zoom > max) {
+    _zoom = max;
+  }
   [_captureDevice lockForConfiguration:NULL];
   [_captureDevice setVideoZoomFactor:_zoom];
   [_captureDevice unlockForConfiguration];
