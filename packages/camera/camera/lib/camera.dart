@@ -624,7 +624,6 @@ class CameraController extends ValueNotifier<CameraValue> {
     }
   }
 
-
   /// Increments zoom step by 1
   Future<void> zoomIn() async {
     await _channel.invokeMethod<void>('zoomIn');
@@ -638,6 +637,17 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Decrements zoom step by 1
   Future<void> zoomOut() async {
     await _channel.invokeMethod<void>('zoomOut');
+  }
+
+  /// Gets max zoom factor
+  Future<double> getMaxZoomFactor() async {
+    try {
+      final double maxZoomFactor = await _channel
+          .invokeMethod('maxZoomFactor');
+      return  maxZoomFactor;
+    } on PlatformException catch (e) {
+      throw CameraException(e.code, e.message);
+    }
   }
 
   /// Releases the resources of this camera.

@@ -269,7 +269,7 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     return;
   }
   AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
-  float max=videoDevice.activeFormat.videoMaxZoomFactor;
+  float max = videoDevice.activeFormat.videoMaxZoomFactor;
   if(_zoom > max) {
     _zoom = max;
   }
@@ -900,6 +900,10 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     NSUInteger step = ((NSNumber *)call.arguments[@"step"]).unsignedIntegerValue;
     [_camera zoom:step];
     result(nil);
+  } else if ([@"maxZoomFactor" isEqualToString:call.method]) {
+    AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    float max = videoDevice.activeFormat.videoMaxZoomFactor;
+    result(max);
   } else {
     NSDictionary *argsMap = call.arguments;
     NSUInteger textureId = ((NSNumber *)argsMap[@"textureId"]).unsignedIntegerValue;
