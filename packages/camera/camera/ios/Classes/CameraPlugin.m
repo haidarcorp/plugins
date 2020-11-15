@@ -276,6 +276,16 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_captureDevice unlockForConfiguration];
 }
 
+- (float)getMaxZoomLevel:(CGFloat)step {
+  AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+  float max = videoDevice.activeFormat.videoMaxZoomFactor;
+  return max;
+}
+
+- (float)getZoomLevel {
+  return _zoom;
+}
+
 - (void)captureToFile:(NSString *)path result:(FlutterResult)result API_AVAILABLE(ios(10)) {
   AVCapturePhotoSettings *settings = [AVCapturePhotoSettings photoSettings];
   if (_resolutionPreset == max) {
@@ -907,8 +917,10 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     [_camera zoom:step];
     result(nil);
   } else if ([@"getZoomLevel" isEqualToString:call.method]) {
+    float zoom = [_camera getZoomLevel];
     result(nil);
   } else if ([@"getMaxZoomLevel" isEqualToString:call.method]) {
+    float zoom = [_camera getMaxZoomLevel];
     result(nil);
   } else {
     NSDictionary *argsMap = call.arguments;

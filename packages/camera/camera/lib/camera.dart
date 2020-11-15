@@ -301,6 +301,9 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Whether to include audio when recording a video.
   final bool enableAudio;
 
+  /// Indicates current zoom amount [1:getMaxZoomLevel()]
+  double zoomLevel = 1;
+
   int _textureId;
   bool _isDisposed = false;
   StreamSubscription<dynamic> _eventSubscription;
@@ -624,30 +627,34 @@ class CameraController extends ValueNotifier<CameraValue> {
     }
   }
 
-  /// Increments zoom step by 1
-  Future<void> zoomIn() async {
-    await _channel.invokeMethod<void>('zoomIn');
-  }
-
   /// Sets zoom to specified step
   Future<void> zoom(double step) async {
     await _channel.invokeMethod<void>('zoom', <String, dynamic>{'step': step});
+    await getZoomLevel();
+  }
+
+  /// Increments zoom step by 1
+  Future<void> zoomIn() async {
+    await _channel.invokeMethod<void>('zoomIn');
+    await getZoomLevel();
   }
 
   /// Decrements zoom step by 1
   Future<void> zoomOut() async {
     await _channel.invokeMethod<void>('zoomOut');
+    await getZoomLevel();
   }
 
   /// Gets current zoom level
   Future<double> getZoomLevel() async {
+    double zoom;
     try {
-      final double zoomLevel = await _channel
-          .invokeMethod('getZoomLevel');
-      return zoomLevel ?? 1;
+      zoom = await _channel.invokeMethod('getZoomLevel');
     } catch(_) {
-      return 1;
+      zoom = 1;
     }
+    this.zoomLevel = zoom;
+    return zoomLevel;
   }
 
   /// Gets max zoom level
