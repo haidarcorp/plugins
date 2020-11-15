@@ -285,6 +285,7 @@ class CameraController extends ValueNotifier<CameraValue> {
     this.description,
     this.resolutionPreset, {
     this.enableAudio = true,
+    this.zoomLevel = 1,
   }) : super(const CameraValue.uninitialized());
 
   /// The properties of the camera device controlled by this controller.
@@ -302,7 +303,7 @@ class CameraController extends ValueNotifier<CameraValue> {
   final bool enableAudio;
 
   /// Indicates current zoom amount [1:getMaxZoomLevel()]
-  double zoomLevel = 1;
+  double zoomLevel;
 
   int _textureId;
   bool _isDisposed = false;
@@ -343,6 +344,8 @@ class CameraController extends ValueNotifier<CameraValue> {
           reply['previewHeight'].toDouble(),
         ),
       );
+
+      await zoom(zoomLevel);
     } on PlatformException catch (e) {
       throw CameraException(e.code, e.message);
     }
