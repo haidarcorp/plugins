@@ -907,9 +907,9 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     [_camera zoom:step];
     result(nil);
   } else if ([@"getZoomLevel" isEqualToString:call.method]) {
-    result(1);
+    result(nil);
   } else if ([@"getMaxZoomLevel" isEqualToString:call.method]) {
-    result(2);
+    result(nil);
   } else {
     NSDictionary *argsMap = call.arguments;
     NSUInteger textureId = ((NSNumber *)argsMap[@"textureId"]).unsignedIntegerValue;

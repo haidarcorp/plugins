@@ -650,7 +650,7 @@ class CameraController extends ValueNotifier<CameraValue> {
     }
   }
 
-  /// Gets max zoom factor
+  /// Gets max zoom level
   Future<double> getMaxZoomLevel() async {
     try {
       final double maxZoomLevel = await _channel
