@@ -648,7 +648,7 @@ class CameraController extends ValueNotifier<CameraValue> {
       final double maxZoomLevel = await _channel
           .invokeMethod('getMaxZoomLevel');
       return maxZoomLevel ?? 1;
-    } on PlatformException catch (_) {
+    } catch(_) {
       return 1;
     }
   }
