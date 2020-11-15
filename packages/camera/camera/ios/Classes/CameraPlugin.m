@@ -276,7 +276,7 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_captureDevice unlockForConfiguration];
 }
 
-- (float)getMaxZoomLevel:(CGFloat)step {
+- (float)getMaxZoomLevel {
   AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   float max = videoDevice.activeFormat.videoMaxZoomFactor;
   return max;
