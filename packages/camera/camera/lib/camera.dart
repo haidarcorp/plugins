@@ -301,6 +301,9 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Whether to include audio when recording a video.
   final bool enableAudio;
 
+  /// Indicates current zoom amount [1:getMaxZoomLevel()]
+  double zoomLevel = 1;
+
   int _textureId;
   bool _isDisposed = false;
   StreamSubscription<dynamic> _eventSubscription;
@@ -640,13 +643,13 @@ class CameraController extends ValueNotifier<CameraValue> {
   }
 
   /// Gets max zoom factor
-  Future<double> getMaxZoomFactor() async {
+  Future<double> getMaxZoomLevel() async {
     try {
-      final double maxZoomFactor = await _channel
-          .invokeMethod('maxZoomFactor');
-      return  maxZoomFactor;
-    } on PlatformException catch (e) {
-      throw CameraException(e.code, e.message);
+      final double maxZoomLevel = await _channel
+          .invokeMethod('getMaxZoomLevel');
+      return maxZoomLevel ?? 1;
+    } on PlatformException catch (_) {
+      return 1;
     }
   }
 
