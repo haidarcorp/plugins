@@ -187,8 +187,7 @@ static ResolutionPreset getResolutionPresetForString(NSString *preset) {
 @property(assign, nonatomic) CMTime audioTimeOffset;
 @property(nonatomic) CMMotionManager *motionManager;
 @property AVAssetWriterInputPixelBufferAdaptor *videoAdaptor;
-@property(nonatomic, assign) int zoom;
-- (void)zoom:(NSUInteger *)step;
+@property(nonatomic, assign) CGFloat zoom;
 @end
 
 @implementation FLTCam {
@@ -261,8 +260,8 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_captureSession stopRunning];
 }
 
-- (void)zoom:(NSUInteger *)step {
-  _zoom += step;
+- (void)zoom:(CGFloat *)step {
+  _zoom = step;
 
   if (_zoom < 1) {
     _zoom = 1;
@@ -899,13 +898,13 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     [_camera resumeVideoRecording];
     result(nil);
   } else if ([@"zoomIn" isEqualToString:call.method]) {
-    [_camera zoom:1];
+    [_camera zoom:.1];
     result(nil);
   } else if ([@"zoomOut" isEqualToString:call.method]) {
-    [_camera zoom:-1];
+    [_camera zoom:-.1];
     result(nil);
   } else if ([@"zoom" isEqualToString:call.method]) {
-    NSUInteger step = ((NSNumber *)call.arguments[@"step"]).unsignedIntegerValue;
+    float step = [((NSNumber *)call.arguments[@"step"]) floatValue];
     [_camera zoom:step];
     result(nil);
   }/* else if ([@"maxZoomFactor" isEqualToString:call.method]) {
