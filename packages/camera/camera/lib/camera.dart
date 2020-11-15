@@ -649,7 +649,8 @@ class CameraController extends ValueNotifier<CameraValue> {
   Future<double> getZoomLevel() async {
     double zoom;
     try {
-      zoom = await _channel.invokeMethod('getZoomLevel');
+      String zoomValue = await _channel.invokeMethod('getZoomLevel');
+      zoom = double.parse(zoomValue);
     } catch(_) {
       zoom = 1;
     }
@@ -660,9 +661,8 @@ class CameraController extends ValueNotifier<CameraValue> {
   /// Gets max zoom level
   Future<double> getMaxZoomLevel() async {
     try {
-      final double maxZoomLevel = await _channel
-          .invokeMethod('getMaxZoomLevel');
-      return maxZoomLevel ?? 1;
+      String zoomValue = await _channel.invokeMethod('getMaxZoomLevel');
+      return double.parse(zoomValue) ?? 1;
     } catch(_) {
       return 1;
     }

@@ -917,11 +917,13 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     [_camera zoom:step];
     result(nil);
   } else if ([@"getZoomLevel" isEqualToString:call.method]) {
-    CGFloat zoom = [_camera getZoomLevel];
-    result(&zoom);
+    float zoom = [_camera getZoomLevel];
+    NSString *stringValue = [NSString stringWithFormat:@"%f", zoom];
+    result(stringValue);
   } else if ([@"getMaxZoomLevel" isEqualToString:call.method]) {
     float zoom = [_camera getMaxZoomLevel];
-    result(&zoom);
+    NSString *stringValue = [NSString stringWithFormat:@"%f", zoom];
+    result(stringValue);
   } else {
     NSDictionary *argsMap = call.arguments;
     NSUInteger textureId = ((NSNumber *)argsMap[@"textureId"]).unsignedIntegerValue;
