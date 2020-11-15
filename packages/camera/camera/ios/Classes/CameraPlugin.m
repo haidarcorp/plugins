@@ -651,11 +651,13 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   _isRecordingPaused = NO;
 }
 
+/*
 - (void)maxZoomFactor:(FlutterResult)result {
   AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   float max = videoDevice.activeFormat.videoMaxZoomFactor;
   result(max);
 }
+*/
 
 - (void)startImageStreamWithMessenger:(NSObject<FlutterBinaryMessenger> *)messenger {
   if (!_isStreamingImages) {
@@ -906,9 +908,9 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
     NSUInteger step = ((NSNumber *)call.arguments[@"step"]).unsignedIntegerValue;
     [_camera zoom:step];
     result(nil);
-  } else if ([@"maxZoomFactor" isEqualToString:call.method]) {
+  }/* else if ([@"maxZoomFactor" isEqualToString:call.method]) {
     [_camera maxZoomFactor:result];
-  } else {
+  }*/ else {
     NSDictionary *argsMap = call.arguments;
     NSUInteger textureId = ((NSNumber *)argsMap[@"textureId"]).unsignedIntegerValue;
     if ([@"takePicture" isEqualToString:call.method]) {
