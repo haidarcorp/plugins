@@ -187,7 +187,7 @@ static ResolutionPreset getResolutionPresetForString(NSString *preset) {
 @property(assign, nonatomic) CMTime audioTimeOffset;
 @property(nonatomic) CMMotionManager *motionManager;
 @property AVAssetWriterInputPixelBufferAdaptor *videoAdaptor;
-@property(nonatomic, assign) CGFloat zoom;
+@property(assign, nonatomic) CGFloat zoom;
 @end
 
 @implementation FLTCam {
@@ -260,17 +260,16 @@ FourCharCode const videoFormat = kCVPixelFormatType_32BGRA;
   [_captureSession stopRunning];
 }
 
-- (void)zoom:(CGFloat *)step {
-  _zoom = step;
-
-  if (_zoom < 1) {
-    _zoom = 1;
-    return;
-  }
+- (void)zoom:(CGFloat)step {
   AVCaptureDevice *videoDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
   float max = videoDevice.activeFormat.videoMaxZoomFactor;
   if(_zoom > max) {
     _zoom = max;
+  } else if (_zoom < 1) {
+    _zoom = 1;
+    return;
+  } else {
+    _zoom = step;
   }
   [_captureDevice lockForConfiguration:NULL];
   [_captureDevice setVideoZoomFactor:_zoom];
